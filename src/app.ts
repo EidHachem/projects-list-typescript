@@ -31,14 +31,36 @@ class ProjectInput {
     this.configre();
     this.attach();
   }
+  private gatheUserInput(): [string, string, number] | void {
+    const enteredTitle = this.titleInputElement.value;
+    const enteredDescription = this.descriptionInputElement.value;
+    const enteredPeople = this.peopleInputElement.value;
+
+    if (
+      enteredTitle.trim().length === 0 ||
+      enteredDescription.trim().length === 0 ||
+      enteredPeople.trim().length === 0
+    ) {
+      alert('Invalid input');
+      return;
+    } else {
+      return [enteredTitle, enteredDescription, +enteredPeople];
+    }
+  }
+  private clearInputs() {
+    this.titleInputElement.value = '';
+    this.descriptionInputElement.value = '';
+    this.peopleInputElement.value = '';
+  }
   @autoBind
   private submitHandler(e: Event) {
     e.preventDefault();
-    console.log(
-      this.titleInputElement.value,
-      this.descriptionInputElement.value,
-      this.peopleInputElement.value,
-    );
+    const userInput = this.gatheUserInput();
+    if (Array.isArray(userInput)) {
+      const [title, description, people] = userInput;
+      console.log(title, description, people);
+      this.clearInputs();
+    }
   }
 
   private configre() {
