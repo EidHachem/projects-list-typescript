@@ -1,3 +1,15 @@
+function autoBind(_: any, _2: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+  const adjDescriptor = {
+    configurable: true,
+    get() {
+      const boundFn = originalMethod.bind(this);
+      return boundFn;
+    },
+  };
+  return adjDescriptor;
+}
+
 class ProjectInput {
   templateElement: HTMLTemplateElement;
   hostElementL: HTMLDivElement;
@@ -19,6 +31,7 @@ class ProjectInput {
     this.configre();
     this.attach();
   }
+  @autoBind
   private submitHandler(e: Event) {
     e.preventDefault();
     console.log(
@@ -27,9 +40,11 @@ class ProjectInput {
       this.peopleInputElement.value,
     );
   }
+
   private configre() {
-    this.element.addEventListener('submit', this.submitHandler.bind(this));
+    this.element.addEventListener('submit', this.submitHandler);
   }
+
   private attach() {
     this.hostElementL.insertAdjacentElement('afterbegin', this.element);
   }
